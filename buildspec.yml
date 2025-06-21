@@ -3,18 +3,20 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "No build needed. Static files already present."
+      - echo "No frontend build required. Using pre-built static files."
   build:
     commands:
       - echo "Skipping build step."
   post_build:
-  commands:
-    - echo "Uploading assets and purging Fastly cache"
-    - chmod +x upload-assets.sh
-    - ./upload-assets.sh
-    - >
-      curl -X POST "https://api.fastly.com/service/${FASTLY_SERVICE_ID}/purge_all" -H "Fastly-Key: ${FASTLY_API_KEY}" -H "Accept: application/json"
-
+    commands:
+      - echo "Uploading assets and purging Fastly cache"
+      - chmod +x upload-assets.sh
+      - ./upload-assets.sh
+      - echo "Purging Fastly cache for service $FASTLY_SERVICE_ID"
+      - >
+        curl -X POST "https://api.fastly.com/service/${FASTLY_SERVICE_ID}/purge_all" 
+        -H "Fastly-Key: ${FASTLY_API_KEY}" 
+        -H "Accept: application/json"
 
 artifacts:
   files:
