@@ -8,14 +8,13 @@ phases:
     commands:
       - echo "Skipping build step."
   post_build:
-    commands:
-      - chmod +x upload-assets.sh
-      - ./upload-assets.sh
-      - echo "Files uploaded to S3"
-      - >
-        curl -X POST "https://api.fastly.com/service/$FASTLY_SERVICE_ID/purge_all" \
-        -H "Fastly-Key: $FASTLY_API_KEY" \
-        -H "Accept: application/json"
+  commands:
+    - echo "Uploading assets and purging Fastly cache"
+    - chmod +x upload-assets.sh
+    - ./upload-assets.sh
+    - >
+      curl -X POST "https://api.fastly.com/service/${FASTLY_SERVICE_ID}/purge_all" -H "Fastly-Key: ${FASTLY_API_KEY}" -H "Accept: application/json"
+
 
 artifacts:
   files:
