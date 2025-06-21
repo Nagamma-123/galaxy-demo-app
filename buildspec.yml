@@ -1,0 +1,35 @@
+version: 0.2
+
+env:
+  variables:
+    BUCKET_NAME: "galaxy-app-dev"
+    FASTLY_SERVICE_ID: "u8k7i7RrYlA9qOJDYpD5E1"
+    FASTLY_API_KEY: "2MJHuJmAD196DHd88lGLAX"  # Use secrets manager if possible
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing frontend dependencies..."
+      - npm ci
+  build:
+    commands:
+      - echo "Running vite build..."
+      - npm run build
+  post_build:
+    commands:
+      - echo "Uploading assets to S3..."
+      - chmod +x ./upload-assets.sh
+      - ./upload-assets.sh
+      - echo "Purging Fastly cache..."
+      - curl -X POST \
+          -H "Fastly-Key: $FASTLY_API_KEY" \
+          -H "Accept: application/json" \
+          "https://api.fastly.com/service/$FASTLY_SERVICE_ID/purge_all"
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist   # This is where vite build puts files
+
