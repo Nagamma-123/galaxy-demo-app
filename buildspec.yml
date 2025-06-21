@@ -2,23 +2,19 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      nodejs: 18
     commands:
-      - npm install
-
+      - echo "No build needed. Static files already present."
   build:
     commands:
-      - npm run build
-
+      - echo "Skipping build step."
   post_build:
     commands:
       - chmod +x upload-assets.sh
       - ./upload-assets.sh
-      - echo "Deployed to S3"
+      - echo "Files uploaded to S3"
       - >
-        curl -X POST "https://api.fastly.com/service/$FASTLY_SERVICE_ID/purge_all"
-        -H "Fastly-Key: $FASTLY_API_KEY"
+        curl -X POST "https://api.fastly.com/service/$FASTLY_SERVICE_ID/purge_all" \
+        -H "Fastly-Key: $FASTLY_API_KEY" \
         -H "Accept: application/json"
 
 artifacts:
