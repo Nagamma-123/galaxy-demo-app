@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui;
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-purple-600 {
+  color: #7c3aed;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
