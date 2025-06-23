@@ -9,6 +9,11 @@ phases:
       - echo "Skipping build step."
   post_build:
     commands:
+    artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
+
       - echo "Uploading assets and purging Fastly cache"
       - chmod +x upload-assets.sh
       - ./upload-assets.sh
@@ -18,7 +23,4 @@ phases:
         -H "Fastly-Key: ${FASTLY_API_KEY}" 
         -H "Accept: application/json"
 
-artifacts:
-  files:
-    - '**/*'
-  base-directory: dist
+
